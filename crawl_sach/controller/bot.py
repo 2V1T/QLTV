@@ -1,5 +1,6 @@
 # from model.model import book
 from seleniumbase import SB
+# from model.obj import book
 import re
 
 def lay_so(trang_tham_chieu):
@@ -17,9 +18,14 @@ def scrap_url():
                 sb.get(f'https://www.dtv-ebook.com/sach-truyen-ebook-313/{i+1}.html')
             for j in range(0, 12):
                 try:
-                    print(sb.get_attribute(f'/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div/div[2]/ul/li[{j+1}]/div[1]/h2/a', 'href'))
+                    scrap(sb.get_attribute(f'/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div/div[2]/ul/li[{j+1}]/div[1]/h2/a', 'href'))
                 except Exception as e:
                     print(e)
-scrap_url()
-# def scrap(url):
-#     with SB(uc=True, headless=True, incognito=True) as sb:
+def scrap(url):
+    with SB(uc=True, headless=True, incognito=True) as sb:
+        sb.open(url)
+        title = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[1]/td/h2')
+        author = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[2]/td[2]/a')
+        cate = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[4]/td[2]/a')
+        print(title)
+scrap('https://www.dtv-ebook.com/neurotribes-di-san-va-cach-nhin-nhan-moi-ve-chung-tu-ky_22661.html#gsc.tab=0')
