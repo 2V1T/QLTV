@@ -197,3 +197,4 @@ share/python-wheels/
 *.ehthumbs_vista.db-journal-vista.db-journal
 *.ehthumbs_vista.db-journal-vista.db-journal-vista
 *.ehthumbs_vista.db-j
+*.downloaded_files/
