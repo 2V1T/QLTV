@@ -1,7 +1,9 @@
-# from model.model import book
 from seleniumbase import SB
-# from model.obj import book
+from model.obj import book
+from controller.connection import insert_book
+# from PIL import Image
 import re
+import os
 
 def lay_so(trang_tham_chieu):
     pattern = r'/(\d+)(?=\.html$)'
@@ -27,5 +29,20 @@ def scrap(url):
         title = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[1]/td/h2')
         author = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[2]/td[2]/a')
         cate = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[4]/td[2]/a')
-        print(title)
-scrap('https://www.dtv-ebook.com/neurotribes-di-san-va-cach-nhin-nhan-moi-ve-chung-tu-ky_22661.html#gsc.tab=0')
+        des = sb.get_text('//*[@id="chitiet"]')
+        thumbnail = []
+        thumbnail.append(sb.get_attribute('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[1]/img', 'src'))
+        for src in thumbnail:
+            if src.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
+                continue
+            sb.download_file(src, './downloaded_files/')
+            filename = src.split('/')[-1]
+            sb.assert_downloaded_file(filename)
+            folder = 'downloaded_files'
+            filepath = os.path.join(folder, filename)
+            with open(filepath, 'rb') as f:
+                img = f.read()
+                img_byte = bytearray(img)
+                sach=book(title, author, cate, des, img_byte)
+                insert_book(sach)
+        os.remove(filepath)
