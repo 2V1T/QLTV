@@ -23,6 +23,7 @@ def scrap_url():
                     scrap(sb.get_attribute(f'/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div/div[2]/ul/li[{j+1}]/div[1]/h2/a', 'href'))
                 except Exception as e:
                     print(e)
+    os.remove('./downloaded_files/')
 def scrap(url):
     with SB(uc=True, headless=True, incognito=True) as sb:
         sb.open(url)
@@ -32,17 +33,19 @@ def scrap(url):
         des = sb.get_text('//*[@id="chitiet"]')
         thumbnail = []
         thumbnail.append(sb.get_attribute('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[1]/img', 'src'))
+        folder = 'downloaded_files'
+        filepath = ''
         for src in thumbnail:
             if src.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
                 continue
             sb.download_file(src, './downloaded_files/')
             filename = src.split('/')[-1]
             sb.assert_downloaded_file(filename)
-            folder = 'downloaded_files'
             filepath = os.path.join(folder, filename)
-            with open(filepath, 'rb') as f:
-                img = f.read()
-                img_byte = bytearray(img)
-                sach=book(title, author, cate, des, img_byte)
-                insert_book(sach)
-        os.remove(filepath)
+        img = open(filepath, 'rb').read()
+        img_byte = bytearray(img)
+        sach=book(title, author, cate, des, img_byte)
+        insert_book(sach)
+        img = None
+        img_byte.clear()
+        # os.remove(filepath)
