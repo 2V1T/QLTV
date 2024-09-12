@@ -21,6 +21,6 @@ def insert_book(book):
         "description": book.description,
         "book_img": book.thumbnail
     }
-    cursor.execute("EXEC them_sach @name=%(name)s , @author=%(author)s , @category=%(category)s , @description=%(description)s , @book_image=%(book_img)s", params)
+    cursor.execute("EXEC them_sach @name=%(name)s , @author=%(author)s , @category=%(category)s , @description=%(description)s , @book_image=%(book_img)s, @quantity=1", params)
     conn.commit()
     cursor.close()

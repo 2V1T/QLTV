@@ -1,5 +1,5 @@
 from seleniumbase import SB
-from model.obj import book
+from model.obj import Book
 from controller.connection import insert_book
 # from PIL import Image
 import re
@@ -31,8 +31,7 @@ def scrap(url):
         author = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[2]/td[2]/a')
         cate = sb.get_text('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[2]/table/tbody/tr[4]/td[2]/a')
         des = sb.get_text('//*[@id="chitiet"]')
-        thumbnail = []
-        thumbnail.append(sb.get_attribute('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[1]/img', 'src'))
+        thumbnail = [sb.get_attribute('/html/body/section[2]/div[2]/div/div/div[1]/div[1]/div[1]/div[1]/img', 'src')]
         folder = 'downloaded_files'
         filepath = ''
         for src in thumbnail:
@@ -44,7 +43,7 @@ def scrap(url):
             filepath = os.path.join(folder, filename)
         img = open(filepath, 'rb').read()
         img_byte = bytearray(img)
-        sach=book(title, author, cate, des, img_byte)
+        sach=Book(title, author, cate, des, img_byte)
         insert_book(sach)
         img = None
         img_byte.clear()
